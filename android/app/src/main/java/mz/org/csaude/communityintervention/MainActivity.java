@@ -1,4 +1,4 @@
-package mz.org.csaude.sespclinicalsummary;
+package mz.org.csaude.communityintervention;
 
 import android.os.Bundle;
 

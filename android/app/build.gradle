@@ -1,10 +1,10 @@
 apply plugin: 'com.android.application'
 
 android {
-    namespace "mz.org.csaude.sespclinicalsummary"
+    namespace "mz.org.csaude.communityintervention"
     compileSdk rootProject.ext.compileSdkVersion
     defaultConfig {
-        applicationId "mz.org.csaude.sespclinicalsummary"
+        applicationId "mz.org.csaude.communityintervention"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
         versionCode 1
@@ -41,7 +41,6 @@ dependencies {
     androidTestImplementation "androidx.test.espresso:espresso-core:$androidxEspressoCoreVersion"
     implementation project(':capacitor-cordova-android-plugins')
     implementation 'net.zetetic:android-database-sqlcipher:4.5.0@aar'
-
 }
 
 apply from: 'capacitor.build.gradle'
