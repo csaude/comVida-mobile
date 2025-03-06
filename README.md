@@ -1,6 +1,6 @@
-# sesp-clinical-summary (sesp-clinical-summary)
+# Muzima
 
-sesp-clinical-summary
+muzima
 
 ## Install the dependencies
 ```bash
