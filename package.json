@@ -3,7 +3,8 @@
   "version": "3.0.0",
   "description": "Muzima Community Intervention App",
   "productName": "Muzima",
-  "author": "Volóide Tamele",
+  "license": "MIT",
+  "author": "cSaúde (https://csaude.org.mz/)",
   "private": true,
   "scripts": {
     "lint": "eslint --ext .js,.ts,.vue ./",
