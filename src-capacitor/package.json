@@ -1,13 +1,9 @@
 {
+  "dependencies": {
+    "@capacitor/android": "^6.2.0"
+  },
   "name": "muzima",
   "version": "3.0.0",
   "description": "Muzima Community Intervention App",
-  "author": "Volóide Tamele",
-  "private": true,
-  "dependencies": {
-    "@capacitor/android": "^6.0.0",
-    "@capacitor/app": "^6.0.0",
-    "@capacitor/cli": "^6.0.0",
-    "@capacitor/core": "^6.0.0"
-  }
+  "author": "cSaúde (https://csaude.org.mz/)"
 }

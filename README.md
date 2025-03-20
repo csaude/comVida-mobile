@@ -17,7 +17,7 @@ Muzima is an **open-source mobile application** designed to support **community 
 ## 📌 Installation and Setup
 ### 🔹 Prerequisites
 Before installing, ensure you have the following:
-- **Node.js** (v16 or higher)  
+- **Node.js** (v18 or higher)  
 - **Yarn or npm** (Latest version)  
 - **Quasar CLI**  
 - **Capacitor CLI**  
