@@ -4,6 +4,9 @@ module.exports = {
   // Remove this if you have an higher level ESLint config file (it usually happens into a monorepos)
   root: true,
 
+   // Ignore built files & dependencies
+   ignorePatterns: ["node_modules/", "dist/", ".quasar/", "src-capacitor/", "android/", "public/"],
+
   // https://eslint.vuejs.org/user-guide/#how-to-use-a-custom-parser
   // Must use parserOptions instead of "parser" to allow vue-eslint-parser to keep working
   // `parser: 'vue-eslint-parser'` is already included with any 'plugin:vue/**' config and should be omitted
@@ -90,5 +93,6 @@ module.exports = {
     'vue/multi-word-component-names': 'off',
 
     '@typescript-eslint/no-explicit-any': 'off',
+    "quotes": "off" // Completely disables the single/double quotes rule
   }
 }

@@ -85,7 +85,7 @@ const { alertError, alertSuccess } = useSwal();
 // Patient store
 const patientStore = usePatientStore();
 const patients = ref([]); // Local cache for patients
-const searchQuery = ref('');
+//const searchQuery = ref('');
 
 
 // Reactive variables
@@ -218,30 +218,30 @@ const isValidUrl = (url) => {
 };
 
 // Patient CRUD operations
-const searchPatients = async () => {
-  if (!searchQuery.value || searchQuery.value.length < 3) {
-    alertError('Por favor, insira pelo menos 3 caracteres para pesquisar.');
-    return;
-  }
+// const searchPatients = async () => {
+//   if (!searchQuery.value || searchQuery.value.length < 3) {
+//     alertError('Por favor, insira pelo menos 3 caracteres para pesquisar.');
+//     return;
+//   }
 
-  try {
-    await patientStore.searchPatients(searchQuery.value);
-    patients.value = patientStore.patients;
-  } catch (error) {
-    console.error('Error searching patients:', error);
-    alertError('Erro ao pesquisar pacientes.');
-  }
-};
+//   try {
+//     await patientStore.searchPatients(searchQuery.value);
+//     patients.value = patientStore.patients;
+//   } catch (error) {
+//     console.error('Error searching patients:', error);
+//     alertError('Erro ao pesquisar pacientes.');
+//   }
+// };
 
-const savePatient = async (patientData) => {
-  try {
-    await patientStore.savePatient(patientData);
-    alertSuccess('Paciente salvo com sucesso!');
-  } catch (error) {
-    console.error('Error saving patient:', error);
-    alertError('Erro ao salvar paciente.');
-  }
-};
+// const savePatient = async (patientData) => {
+//   try {
+//     await patientStore.savePatient(patientData);
+//     alertSuccess('Paciente salvo com sucesso!');
+//   } catch (error) {
+//     console.error('Error saving patient:', error);
+//     alertError('Erro ao salvar paciente.');
+//   }
+// };
 </script>
 
 
