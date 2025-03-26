@@ -99,7 +99,6 @@ import userService from 'src/services/user/userService';
 import { useSwal } from 'src/composables/shared/dialog/dialog';
 import EncryptionManager from 'src/utils/EncryptionManager';
 import { version } from '../../package.json';
-import { App } from '@capacitor/app';
 
 // Destructure dialog functions
 const { alertError, alertWarning, alertWarningAction } = useSwal();
@@ -174,30 +173,7 @@ const handleReconfigure = async () => {
   }
 };
 
-// Handle first-time setup
-const handleFirstTimeSetup = () => {
-  isFirstTimeSetup.value = false;
-};
 
-// Handle cancel setup
-const handleCancelSetup = async () => {
-  const confirmed = await alertWarningAction(
-    'O aplicativo requer configuração inicial para prosseguir. Sair do aplicativo?'
-  );
-
-  if (confirmed) {
-    if (App && App.exitApp) {
-      App.exitApp();
-    } else if (typeof window !== 'undefined') {
-      window.close();
-    }
-  }
-};
-
-// Open Add Health Facility dialog
-const openAddHealthFacility = () => {
-  isFirstTimeSetup.value = true;
-};
 </script>
 
 <style scoped>

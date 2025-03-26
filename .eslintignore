@@ -1,7 +1,7 @@
-/dist
-/src-capacitor
-/src-cordova
-/.quasar
-/node_modules
+node_modules/
+dist/
+.quasar/
+src-capacitor/
+android/
 .eslintrc.cjs
 /quasar.config.*.temporary.compiled*

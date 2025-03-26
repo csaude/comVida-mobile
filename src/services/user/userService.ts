@@ -21,16 +21,17 @@ class UserService {
       const storedPassword = EncryptionManager.getDecryptedSessionItem('password');
 
       if (storedPassword === password) {
+        throw new Error('Incorrect password for local user.');
         // User authenticated locally
-        console.log('User authenticated locally:', localUser);
-        this.handleLocalLoginResponse(localUser);
-        return {
-          sessionId: localUser.uuid,  // Using uuid as session ID locally
-          user: localUser,
-          locale: this.getLocale() || 'en',
-          allowedLocales: this.getAllowedLocales(),
-          authenticated: true,
-        };
+        // console.log('User authenticated locally:', localUser);
+        // this.handleLocalLoginResponse(localUser);
+        // return {
+        //   sessionId: localUser.uuid,  // Using uuid as session ID locally
+        //   //user: localUser,
+        //   locale: this.getLocale() || 'en',
+        //   allowedLocales: this.getAllowedLocales(),
+        //   authenticated: true,
+        // };
       } else {
         throw new Error('Incorrect password for local user.');
       }
@@ -84,14 +85,15 @@ class UserService {
    * @param data - The login response data.
    */
   handleLoginResponse(data: LoginResponse) {
-    const { sessionId, user, locale, allowedLocales } = data;
+    console.log(data);
+    // const { sessionId, user, locale, allowedLocales } = data;
 
-    sessionStorage.setItem('sessionId', sessionId);
-    sessionStorage.setItem('userInfo', JSON.stringify(user));
-    sessionStorage.setItem('locale', locale);
-    sessionStorage.setItem('allowedLocales', JSON.stringify(allowedLocales));
-    sessionStorage.setItem('privileges', JSON.stringify(user.privileges));
-    sessionStorage.setItem('roles', JSON.stringify(user.roles));
+    // sessionStorage.setItem('sessionId', sessionId);
+    // sessionStorage.setItem('userInfo', JSON.stringify(user));
+    // sessionStorage.setItem('locale', locale);
+    // sessionStorage.setItem('allowedLocales', JSON.stringify(allowedLocales));
+    // sessionStorage.setItem('privileges', JSON.stringify(user.privileges));
+    // sessionStorage.setItem('roles', JSON.stringify(user.roles));
   }
 
   /**
@@ -99,12 +101,13 @@ class UserService {
    * @param user - The user object from the local database.
    */
   handleLocalLoginResponse(user: User) {
-    sessionStorage.setItem('sessionId', user.uuid);
-    sessionStorage.setItem('userInfo', JSON.stringify(user));
-    sessionStorage.setItem('locale', this.getLocale() || 'en');
-    sessionStorage.setItem('allowedLocales', JSON.stringify(this.getAllowedLocales()));
-    sessionStorage.setItem('privileges', JSON.stringify(user.privileges));
-    sessionStorage.setItem('roles', JSON.stringify(user.roles));
+    console.log(user);
+    // sessionStorage.setItem('sessionId', user.uuid);
+    // sessionStorage.setItem('userInfo', JSON.stringify(user));
+    // sessionStorage.setItem('locale', this.getLocale() || 'en');
+    // sessionStorage.setItem('allowedLocales', JSON.stringify(this.getAllowedLocales()));
+    // sessionStorage.setItem('privileges', JSON.stringify(user.privileges));
+    // sessionStorage.setItem('roles', JSON.stringify(user.roles));
   }
 
   /**
