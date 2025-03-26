@@ -50,6 +50,9 @@ export class Patient {
   @Column('text')
   uuid!: string;
 
+  @Column('text')
+  cohort!: string;
+
   constructor(init?: Partial<Patient>) {
     if (init) {
       Object.assign(this, init);
