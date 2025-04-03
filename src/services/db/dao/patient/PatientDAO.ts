@@ -7,46 +7,77 @@ class PatientDAO {
 
   constructor() {
     const dataSource = DatabaseManager.getInstance().getDataSource();
-    this.patientRepo = dataSource.getRepository(Patient); // Initialize the repository in the constructor
+    this.patientRepo = dataSource.getRepository(Patient);
   }
 
   // Create a new patient record
   async create(patientData: Partial<Patient>): Promise<Patient> {
-    const patient = this.patientRepo.create(patientData);
-    return await this.patientRepo.save(patient);
+    try {
+      // Evita duplicação de UUID
+      if (patientData.uuid) {
+        const existingPatient = await this.patientRepo.findOne({ where: { uuid: patientData.uuid } });
+        if (existingPatient) {
+          throw new Error('UUID already exists');
+        }
+      }
+
+      const patient = this.patientRepo.create(patientData);
+      return await this.patientRepo.save(patient);
+    } catch (error) {
+      console.error('Error creating patient:', error);
+      throw new Error('Failed to create patient');
+    }
   }
 
   // Get all patients
   async getAll(): Promise<Patient[]> {
-    return await this.patientRepo.find();
+    try {
+      return await this.patientRepo.find({ order: { names: 'ASC' } });
+    } catch (error) {
+      console.error('Error fetching patients:', error);
+      throw new Error('Failed to fetch patients');
+    }
   }
 
   // Get a patient by ID
   async getById(id: number): Promise<Patient | null> {
-    return await this.patientRepo.findOneBy({ id });
+    try {
+      return await this.patientRepo.findOne({ where: { id } });
+    } catch (error) {
+      console.error('Error fetching patient by ID:', error);
+      throw new Error('Failed to fetch patient');
+    }
   }
 
   // Update a patient record
   async update(id: number, updateData: Partial<Patient>): Promise<Patient> {
-    const patient = await this.patientRepo.findOneBy({ id });
+    try {
+      const patient = await this.getById(id);
+      if (!patient) {
+        throw new Error('Patient not found');
+      }
 
-    if (!patient) {
-      throw new Error('Patient not found');
+      Object.assign(patient, updateData);
+      return await this.patientRepo.save(patient);
+    } catch (error) {
+      console.error('Error updating patient:', error);
+      throw new Error('Failed to update patient');
     }
-
-    Object.assign(patient, updateData);
-    return await this.patientRepo.save(patient);
   }
 
   // Delete a patient record
   async delete(id: number): Promise<void> {
-    const patient = await this.patientRepo.findOneBy({ id });
+    try {
+      const patient = await this.getById(id);
+      if (!patient) {
+        throw new Error('Patient not found');
+      }
 
-    if (!patient) {
-      throw new Error('Patient not found');
+      await this.patientRepo.remove(patient);
+    } catch (error) {
+      console.error('Error deleting patient:', error);
+      throw new Error('Failed to delete patient');
     }
-
-    await this.patientRepo.remove(patient);
   }
 
   // Search for patients
@@ -59,7 +90,7 @@ class PatientDAO {
           { names: Like(`%${criteria}%`) },
           { attributes: Like(`%${criteria}%`) },
         ],
-        order: { names: 'ASC' }, // Example: Order by names alphabetically
+        order: { names: 'ASC' },
       });
     } catch (error) {
       console.error('Error searching for patients:', error);

@@ -1,6 +1,6 @@
-import { Entity, PrimaryGeneratedColumn, Column } from 'typeorm';
+import { Entity, PrimaryGeneratedColumn, Column, Index } from 'typeorm';
 
-@Entity('patient') // Map this class to the "patient" table
+@Entity('patient')
 export class Patient {
   @PrimaryGeneratedColumn()
   id!: number;
@@ -11,23 +11,24 @@ export class Patient {
   @Column('text', { nullable: true })
   tags!: string | null;
 
-  @Column('text', { nullable: true })
-  deletionStatus!: string | null;
+  @Column('boolean', { nullable: true })
+  deletionStatus!: boolean | null;
 
   @Column('integer')
   personId!: number;
 
+  @Index()
   @Column('text', { nullable: true })
   personUuid!: string | null;
 
   @Column('text', { nullable: true })
   gender!: string | null;
 
-  @Column('integer', { nullable: true })
-  birthdate!: number | null;
+  @Column('date', { nullable: true })
+  birthdate!: Date | null;
 
-  @Column('integer')
-  birthdateEstimated!: number;
+  @Column('boolean')
+  birthdateEstimated!: boolean;
 
   @Column('text', { nullable: true })
   names!: string | null;
@@ -38,8 +39,8 @@ export class Patient {
   @Column('text', { nullable: true })
   addresses!: string | null;
 
-  @Column('integer')
-  voided!: number;
+  @Column('boolean')
+  voided!: boolean;
 
   @Column('text', { nullable: true })
   personTags!: string | null;
@@ -47,8 +48,12 @@ export class Patient {
   @Column('text', { nullable: true })
   uri!: string | null;
 
+  @Index()
   @Column('text')
   uuid!: string;
+
+  @Column('text')
+  cohort!: string;
 
   constructor(init?: Partial<Patient>) {
     if (init) {
