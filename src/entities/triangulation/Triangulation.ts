@@ -1,5 +1,12 @@
-import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, JoinColumn } from 'typeorm';
-import { Patient } from './Patient';
+import {
+  Entity,
+  PrimaryGeneratedColumn,
+  Column,
+  ManyToOne,
+  JoinColumn,
+} from 'typeorm';
+
+import { Patient } from 'src/entities/patient/Patient'; // Importa a entidade Patient
 
 @Entity('triangulation') // Mapeia esta classe para a tabela "triangulation"
 export class Triangulation {
@@ -18,6 +25,9 @@ export class Triangulation {
 
   @Column('text')
   type!: string; // Indica se é ATS ou Visita
+
+  @Column('integer')
+  cohort_number_id!: number;
 
   constructor(init?: Partial<Triangulation>) {
     if (init) {

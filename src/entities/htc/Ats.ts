@@ -1,5 +1,11 @@
-import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, JoinColumn } from 'typeorm';
-import { Patient } from './Patient';
+import {
+  Entity,
+  PrimaryGeneratedColumn,
+  Column,
+  ManyToOne,
+  JoinColumn,
+} from 'typeorm';
+import { Patient } from 'src/entities/patient/Patient'; // Importa a entidade Patient
 
 @Entity('ats') // Mapeia esta classe para a tabela "ats"
 export class ATS {

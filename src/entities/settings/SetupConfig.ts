@@ -1,7 +1,7 @@
 import { Entity, PrimaryGeneratedColumn, Column, Index } from 'typeorm';
 
-@Entity('settings')
-export class Settings {
+@Entity('setup_config')
+export class SetupConfig {
   @PrimaryGeneratedColumn()
   id!: number;
 
@@ -12,10 +12,10 @@ export class Settings {
   @Column('json', { nullable: true })
   setup!: Record<string, any> | null;
 
-  constructor(init?: Partial<Settings>) {
+  constructor(init?: Partial<SetupConfig>) {
     if (init) {
       Object.assign(this, init);
     }
   }
 }
-// The Settings class represents a settings entity in the database.
+// The SetupConfig class represents a setup configuration entity in the database.

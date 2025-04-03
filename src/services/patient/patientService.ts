@@ -1,111 +1,37 @@
-import api from '../api/apiService';
-import PatientDAO from '../db/dao/patient/PatientDAO';
-import { Patient } from '../../entities/patient/Patient';
+import api from 'src/services/api/apiService';
+import { Patient } from 'src/entities/patient/Patient';
 
-class PatientService {
-  /**
-   * Search patients by name or identifier.
-   */
-  async searchPatients(search: string, index: number = 0): Promise<any[]> {
-    if (!search || search.length <= 2) {
-      throw new Error('Por favor preencha o campo de pesquisa com pelo menos 3 caracteres!');
-    }
+const PatientService = {
+  async getAll(): Promise<Patient[]> {
+    const response = await api.get('/patients');
+    return response.data;
+  },
 
-    try {
-      let url: string;
+  async getById(id: number): Promise<Patient> {
+    const response = await api.get(`/patients/${id}`);
+    return response.data;
+  },
 
-      // Identifier search check
-      if ((search.match(/\//g) || []).length === 2 && search.replace(/\s/g, '').length > 12) {
-        url = `/patient?identifier=${encodeURIComponent(search.replace(/\s/g, ''))}&v=custom:(uuid,display,identifiers:(uuid,identifier,location:(name)),person:(gender,age,dead,birthdate,addresses:(display,preferred,address1,address3,address5,address6),attributes:(display))`;
-      } else {
-        // General search query
-        url = `/patient?q=${encodeURIComponent(search)}&v=custom:(uuid,display,identifiers:(uuid,identifier,location:(name)),person:(gender,age,dead,birthdate,addresses:(display,preferred,address1,address3,address5,address6),attributes:(display))&limit=50&startIndex=${index}`;
-      }
+  async save(patient: Partial<Patient>): Promise<Patient> {
+    const response = await api.post('/patients', patient);
+    return response.data;
+  },
 
-      const response = await api.get(url);
-      return response.data || [];
-    } catch (error) {
-      console.error('Error while searching patients:', error);
-      throw error;
-    }
-  }
+  async update(id: number, patient: Partial<Patient>): Promise<Patient> {
+    const response = await api.put(`/patients/${id}`, patient);
+    return response.data;
+  },
 
-  /**
-   * Get detailed patient information.
-   */
-  async getPatientDetails(patientId: string): Promise<any> {
-    try {
-      const url = `/patient/${patientId}?v=full`;
-      const response = await api.get(url);
-      return response.data;
-    } catch (error) {
-      console.error('Error while fetching patient details:', error);
-      throw error;
-    }
-  }
+  async delete(id: number): Promise<void> {
+    await api.delete(`/patients/${id}`);
+  },
 
-  /**
-   * Fetch the next set of paginated results.
-   */
-  async getNextResults(url: string): Promise<{ results: any[]; nextUrl: string | null }> {
-    try {
-      const response = await api.get(url);
-      const data = response.data;
+  async search(criteria: string): Promise<Patient[]> {
+    const response = await api.get(`/patients/search`, {
+      params: { q: criteria },
+    });
+    return response.data;
+  },
+};
 
-      const nextLink = data.links?.find((link: any) => link.rel === 'next')?.uri || null;
-
-      return {
-        results: data.results || [],
-        nextUrl: nextLink,
-      };
-    } catch (error) {
-      console.error('Error fetching next results:', error);
-      throw error;
-    }
-  }
-
-  /**
-   * Save a new patient to the local database.
-   */
-  async savePatient(patientData: Partial<Patient>): Promise<Patient> {
-    try {
-      return await PatientDAO.create(patientData);
-    } catch (error) {
-      console.error('Error saving patient:', error);
-      throw error;
-    }
-  }
-
-  /**
-   * Delete a patient from the local database.
-   */
-  async deletePatient(id: number): Promise<void> {
-    try {
-      await PatientDAO.delete(id);
-    } catch (error) {
-      console.error('Error deleting patient:', error);
-      throw error;
-    }
-  }
-
-  /**
-   * Search for patients based on a given criteria
-   * @param searchCriteria The search term to match against patient data
-   * @returns Promise<Patient[]> A list of patients matching the search criteria
-   */
-  async search(searchCriteria: string): Promise<Patient[]> {
-    if (!searchCriteria || searchCriteria.trim().length < 3) {
-      throw new Error('Por favor, preencha o campo de pesquisa com pelo menos 3 caracteres!');
-    }
-
-    try {
-      const results = await PatientDAO.search(searchCriteria);
-      return results;
-    } catch (error) {
-      console.error('Error searching patients in service:', error);
-      throw new Error('Failed to search patients.');
-    }
-  }
-}
-
-export default new PatientService();
+export default PatientService;

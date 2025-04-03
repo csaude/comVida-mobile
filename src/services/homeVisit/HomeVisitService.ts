@@ -1,3 +1,6 @@
+import api from 'src/services/api/apiService';
+import { HomeVisit } from 'src/entities/homeVisit/HomeVisit';
+
 export default {
   async getAll(): Promise<HomeVisit[]> {
     const response = await api.get('/home-visits');
@@ -16,5 +19,5 @@ export default {
 
   async delete(id: number): Promise<void> {
     await api.delete(`/home-visits/${id}`);
-  }
+  },
 };

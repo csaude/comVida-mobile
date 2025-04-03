@@ -7,11 +7,15 @@ class EligibilityCategoryPatientDAO {
 
   constructor() {
     const dataSource = DatabaseManager.getInstance().getDataSource();
-    this.eligibilityCategoryPatientRepo = dataSource.getRepository(EligibilityCategoryPatient);
+    this.eligibilityCategoryPatientRepo = dataSource.getRepository(
+      EligibilityCategoryPatient
+    );
   }
 
   // Criar um novo registro de EligibilityCategoryPatient
-  async create(data: Partial<EligibilityCategoryPatient>): Promise<EligibilityCategoryPatient> {
+  async create(
+    data: Partial<EligibilityCategoryPatient>
+  ): Promise<EligibilityCategoryPatient> {
     const record = this.eligibilityCategoryPatientRepo.create(data);
     return await this.eligibilityCategoryPatientRepo.save(record);
   }
@@ -32,7 +36,9 @@ class EligibilityCategoryPatientDAO {
   }
 
   // Obter registros de EligibilityCategoryPatient por ID do paciente
-  async getByPatientId(patientId: number): Promise<EligibilityCategoryPatient[]> {
+  async getByPatientId(
+    patientId: number
+  ): Promise<EligibilityCategoryPatient[]> {
     return await this.eligibilityCategoryPatientRepo.find({
       where: { patient: { id: patientId } },
       relations: ['patient', 'category'],
@@ -40,7 +46,10 @@ class EligibilityCategoryPatientDAO {
   }
 
   // Atualizar um registro de EligibilityCategoryPatient
-  async update(id: number, updateData: Partial<EligibilityCategoryPatient>): Promise<EligibilityCategoryPatient> {
+  async update(
+    id: number,
+    updateData: Partial<EligibilityCategoryPatient>
+  ): Promise<EligibilityCategoryPatient> {
     const record = await this.eligibilityCategoryPatientRepo.findOneBy({ id });
 
     if (!record) {
@@ -60,3 +69,5 @@ class EligibilityCategoryPatientDAO {
     }
 
     await this.eligibilityCategoryPatientRepo.remove(record);
+  }
+}

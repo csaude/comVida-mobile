@@ -1,5 +1,11 @@
-import { Entity, ManyToOne, PrimaryGeneratedColumn, JoinColumn, Column } from 'typeorm';
-import { Patient } from './Patient';
+import {
+  Entity,
+  ManyToOne,
+  PrimaryGeneratedColumn,
+  JoinColumn,
+  Column,
+} from 'typeorm';
+import { Patient } from 'src/entities/patient/Patient'; // Importa a entidade Patient
 import { EligibilityCategory } from './EligibilityCategory';
 
 @Entity('eligibility_category_patient') // Mapeia esta classe para a tabela "eligibility_category_patient"

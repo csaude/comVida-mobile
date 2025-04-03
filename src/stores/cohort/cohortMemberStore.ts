@@ -1,6 +1,6 @@
 import { defineStore } from 'pinia';
-import CohortMemberService from '../../services/cohortMemberService';
-import { CohortMember } from '../../entities/CohortMember';
+import CohortMemberService from 'src/services/cohort/CohortMemberService';
+import { CohortMember } from 'src/entities/cohort/CohortMember';
 
 export const useCohortMemberStore = defineStore('cohortMember', {
   state: () => ({

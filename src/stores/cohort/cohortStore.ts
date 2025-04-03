@@ -1,6 +1,6 @@
 import { defineStore } from 'pinia';
-import CohortService from '../../services/cohortService';
-import { Cohort } from '../../entities/Cohort';
+import CohortService from 'src/services/cohort/CohortService';
+import { Cohort } from 'src/entities/cohort/Cohort';
 
 export const useCohortStore = defineStore('cohort', {
   state: () => ({
@@ -36,7 +36,7 @@ export const useCohortStore = defineStore('cohort', {
     async deleteCohort(id: number) {
       try {
         await CohortService.delete(id);
-        this.cohorts = this.cohorts.filter((cohort) => cohort.id !== id);
+        this.cohorts = this.cohorts.filter((cohort: any) => cohort.id !== id);
       } catch (error) {
         console.error('Error deleting cohort:', error);
       }

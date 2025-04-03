@@ -1,6 +1,12 @@
-import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, JoinColumn } from 'typeorm';
+import {
+  Entity,
+  PrimaryGeneratedColumn,
+  Column,
+  ManyToOne,
+  JoinColumn,
+} from 'typeorm';
 import { Cohort } from './Cohort';
-import { Patient } from './Patient';
+import { Patient } from 'src/entities/patient/Patient'; // Importa a entidade Patient
 
 @Entity('cohort_member') // Mapeia esta classe para a tabela "cohort_member"
 export class CohortMember {

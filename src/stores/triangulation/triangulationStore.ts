@@ -1,6 +1,6 @@
 import { defineStore } from 'pinia';
-import TriangulationService from '../../services/triangulationService';
-import { Triangulation } from '../../entities/Triangulation';
+import TriangulationService from 'src/services/triangulation/TriangulationService';
+import { Triangulation } from 'src/entities/triangulation/Triangulation';
 
 export const useTriangulationStore = defineStore('triangulation', {
   state: () => ({
@@ -26,7 +26,9 @@ export const useTriangulationStore = defineStore('triangulation', {
 
     async saveTriangulation(triangulationData: Partial<Triangulation>) {
       try {
-        const newTriangulation = await TriangulationService.save(triangulationData);
+        const newTriangulation = await TriangulationService.save(
+          triangulationData
+        );
         this.triangulations.push(newTriangulation);
       } catch (error) {
         console.error('Error saving triangulation:', error);
@@ -36,7 +38,9 @@ export const useTriangulationStore = defineStore('triangulation', {
     async deleteTriangulation(id: number) {
       try {
         await TriangulationService.delete(id);
-        this.triangulations = this.triangulations.filter((triangulation) => triangulation.id !== id);
+        this.triangulations = this.triangulations.filter(
+          (triangulation: any) => triangulation.id !== id
+        );
       } catch (error) {
         console.error('Error deleting triangulation:', error);
       }

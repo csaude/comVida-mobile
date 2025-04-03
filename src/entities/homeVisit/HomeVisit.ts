@@ -1,5 +1,11 @@
-import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, JoinColumn } from 'typeorm';
-import { Patient } from './Patient';
+import {
+  Entity,
+  PrimaryGeneratedColumn,
+  Column,
+  ManyToOne,
+  JoinColumn,
+} from 'typeorm';
+import { Patient } from 'src/entities/patient/Patient'; // Importa a entidade Patient
 
 @Entity('home_visit') // Mapeia esta classe para a tabela "home_visit"
 export class HomeVisit {
@@ -15,6 +21,9 @@ export class HomeVisit {
 
   @Column('integer')
   visit_number!: number;
+
+  @Column('integer')
+  cohort_number_id!: number;
 
   constructor(init?: Partial<HomeVisit>) {
     if (init) {
