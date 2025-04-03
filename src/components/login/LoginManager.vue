@@ -7,7 +7,7 @@
         />
       </q-dialog>
       <div v-if="!isFirstTimeSetup" class="login-form">
-        <h1>SESP Sumário Clínico</h1>
+        <h1>Muzima</h1>
         <p>
           Ao acessar este sistema, você está prestes a visualizar informações
           altamente confidenciais de utentes. É sua responsabilidade protegê-las
