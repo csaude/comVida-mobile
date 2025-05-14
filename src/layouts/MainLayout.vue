@@ -1,6 +1,6 @@
 <template>
   <q-layout view="hHh Lpr lff">
-    <q-header elevated>
+    <q-header >
       <q-toolbar>
         <q-btn
           flat
@@ -11,51 +11,65 @@
           @click="toggleLeftDrawer"
         />
         <q-toolbar-title>
-          SESP Sumário Clínico
+          {{ title }}
         </q-toolbar-title>
+        <q-btn flat dense icon="sell" @click="refreshList" />
+        <q-btn flat dense icon="sync" />
       </q-toolbar>
     </q-header>
 
     <q-drawer
-      v-model="leftDrawerOpen"
-      overlay
-      bordered
+  v-model="leftDrawerOpen"
+  overlay
+  bordered
+  class="custom-drawer"
+>
+  <div class="column q-pa-md items-center">
+    <!-- App Logo -->
+    <q-avatar size="80px">
+      <img src="/app-logo.png" alt="App Logo" />
+    </q-avatar>
+
+    <!-- Profile -->
+    <div class="q-mt-md text-subtitle1">
+      <q-icon name="person" class="q-mr-sm" />
+      <span>{{ username || 'pf.adultos' }}</span>
+    </div>
+  </div>
+
+  <!-- Menu -->
+  <q-list class="q-mt-lg">
+    <q-item
+      v-for="link in linksList"
+      :key="link.title"
+      clickable
+      @click="handleNavigation(link.link)"
     >
-      <q-list>
-        <q-card bordered square flat>
-          <q-card-section>
-            <div class="text-h6">Bem Vindo</div>
-            <div class="text-subtitle2">{{ username }}</div>
-          </q-card-section>
-          <q-separator dark />
-        </q-card>
+      <q-item-section avatar>
+        <q-icon :name="link.icon" />
+      </q-item-section>
+      <q-item-section>
+        <q-item-label>{{ link.title }}</q-item-label>
+      </q-item-section>
+    </q-item>
+  </q-list>
 
-        <q-item
-          v-for="link in linksList"
-          :key="link.title"
-          clickable
-          @click="handleNavigation(link.link)"
-        >
-          <q-item-section avatar>
-            <q-icon :name="link.icon" />
-          </q-item-section>
-          <q-item-section>
-            <q-item-label>{{ link.title }}</q-item-label>
-            <q-item-label caption>{{ link.caption }}</q-item-label>
-          </q-item-section>
-        </q-item>
-      </q-list>
-    </q-drawer>
+  <!-- App version at bottom -->
+  <div class="absolute-bottom text-center text-grey q-pa-sm text-caption">
+    v3.8.1
+  </div>
+</q-drawer>
 
-    <q-page-container>
+
+    <q-page-container class="bg-gray-2" >
       <router-view />
     </q-page-container>
   </q-layout>
 </template>
 
 <script setup>
-import { ref, onMounted, onBeforeUnmount } from 'vue';
-import { useRouter } from 'vue-router';
+import { ref, onMounted, onBeforeUnmount, watch } from 'vue';
+import { useRouter, useRoute } from 'vue-router';
 import { useSwal } from 'src/composables/shared/dialog/dialog';
 import userService from 'src/services/user/userService';
 
@@ -63,7 +77,9 @@ defineOptions({
   name: 'MainLayout'
 });
 
+const title = ref('mUzima');
 const router = useRouter();
+const route = useRoute();
 const username = ref('');
 const leftDrawerOpen = ref(false);
 const { alertWarningAction } = useSwal();
@@ -74,12 +90,29 @@ const inactivityTimer = ref(null);
 
 // Navigation links
 const linksList = [
-  { title: 'Inicio', caption: 'Ecrã Principal', icon: 'home', link: '/home' },
-  { title: 'Sumário Clinico', caption: 'Aceder ao Sumário Clinico', icon: 'description', link: '/summary' },
-  { title: 'Relatório de Uso', caption: 'Aceder ao Relatório de Uso', icon: 'query_stats', link: '/report' },
-  { title: 'Configurações', caption: 'Gerir Configurações', icon: 'settings', link: '/settings' },
-  { title: 'Sair', caption: 'Terminar Sessão', icon: 'logout', link: 'logout' }
+  { title: 'Inicio', icon: 'home', link: { path: '/home' } },
+  { title: 'Configurações', icon: 'settings', link: { path: '/home', query: { component: 'SettingsPage' } } },
+  { title: 'Acerca', icon: 'info', link: { path: '/home', query: { component: 'AboutPage' } } },
+  { title: 'Sair', icon: 'logout', link: 'logout' }
 ];
+
+// Watch for route query changes to update the title
+watch(
+  () => route.query.component,
+  (component) => {
+    switch (component) {
+      case 'SettingsPage':
+        title.value = 'Configurações';
+        break;
+      case 'AboutPage':
+        title.value = 'Acerca';
+        break;
+      default:
+        title.value = 'mUzima';
+    }
+  },
+  { immediate: true } // trigger on first load
+);
 
 // Load settings and username on component mount
 onMounted(() => {
@@ -192,16 +225,18 @@ function toggleLeftDrawer() {
 
 // Handle navigation
 async function handleNavigation(link) {
+  leftDrawerOpen.value = false;
   if (link === 'logout') {
     const confirmed = await alertWarningAction('Tem certeza de que deseja terminar a sessão e sair do aplicativo?');
     if (confirmed) {
       handleLogout();
     }
   } else {
-    router.push(link);
-    leftDrawerOpen.value = false; // Close the drawer after navigation
+    router.push(link); // This works for both string and object navigation
+    leftDrawerOpen.value = false;
   }
 }
+
 </script>
 
 <style scoped>
@@ -223,4 +258,20 @@ async function handleNavigation(link) {
   font-size: 14px;
   color: #666;
 }
+.custom-drawer {
+  background-color: #fff;
+  width: 260px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.q-item__section--avatar .q-icon {
+  font-size: 22px;
+}
+
+.q-avatar img {
+  object-fit: contain;
+}
+
 </style>

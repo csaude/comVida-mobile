@@ -12,7 +12,7 @@
     </div>
     <div class="text-center q-my-lg">
       <label class="text-weight-medium text-light-green-10">
-        SESP Sumário Clínico
+        Muzima
       </label>
     </div>
     <div class="q-pa-md">

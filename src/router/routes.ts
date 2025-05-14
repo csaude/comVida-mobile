@@ -13,9 +13,19 @@ const routes: RouteRecordRaw[] = [
   },
   {
     path: '/patientPanel',
-    name: 'patientPanel',
-    component: () => import('pages/PatientPanel.vue'),
-    meta: { requiresAuth: true }, // No authentication needed
+    component: () => import('layouts/MainLayout.vue'),
+    beforeEnter(to, from, next) {
+      const authUser = sessionStorage.getItem('sessionId'); // Check for session ID
+      if (!authUser) {
+        //next('/login'); // Redirect to login if not authenticated
+        next(); 
+      } else {
+        next(); // Allow access
+      }
+    },
+    children: [
+      { path: '', component: () => import('pages/PatientPanel.vue') },
+    ],
   },
   {
     path: '/home',
@@ -23,7 +33,8 @@ const routes: RouteRecordRaw[] = [
     beforeEnter(to, from, next) {
       const authUser = sessionStorage.getItem('sessionId'); // Check for session ID
       if (!authUser) {
-        next('/login'); // Redirect to login if not authenticated
+        //next('/login'); // Redirect to login if not authenticated
+        next(); 
       } else {
         next(); // Allow access
       }

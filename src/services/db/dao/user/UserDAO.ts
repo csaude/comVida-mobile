@@ -1,4 +1,4 @@
-import DatabaseManager from 'src/services/db/DatabaseManager';
+//import DatabaseManager from 'src/services/db/DatabaseManager';
 import { User } from 'src/entities/user/User';
 import { Repository, Like } from 'typeorm';
 
@@ -6,8 +6,8 @@ class UserDAO {
   private userRepo: Repository<User>;
 
   constructor() {
-    const dataSource = DatabaseManager.getInstance().getDataSource();
-    this.userRepo = dataSource.getRepository(User); // Initialize the repository for the User entity
+    // const dataSource = DatabaseManager.getInstance().getDataSource();
+    // this.userRepo = dataSource.getRepository(User); // Initialize the repository for the User entity
   }
 
   // Create a new user record

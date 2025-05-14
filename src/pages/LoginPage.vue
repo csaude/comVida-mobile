@@ -1,93 +1,79 @@
 <template>
-  <div class="login-page">
-    
-    <!-- Login Form -->
-    <div class="login-form">
-      <!-- Header Banner -->
-      <div class="q-pa-none q-gutter-sm q-mb-xl">
-        <q-banner inline-actions class="bg-light-green-10 text-white text-center text-weight-medium">
-          Muzima
-          <template v-slot:action>
-            <q-btn color="white" outline dense @click="handleReconfigure" icon="sym_o_reset_wrench" />
-          </template>
-        </q-banner>
-      </div>
+  <div class="login-wrapper column full-width full-height">
+    <!-- Top Banner -->
+    <div class="top-banner"></div>
 
-      <!-- Logo -->
-      <div class="text-center q-my-xl">
-        <q-avatar size="80px" font-size="52px" color="teal" text-color="white">
-          <img src="/app-logo.png" alt="App Logo" />
-        </q-avatar>
-      </div>
+    <!-- Floating Logo -->
+    <div class="logo-container">
+      <q-avatar size="80px" class="bg-white">
+        <img src="/muzima-logo.png" />
+      </q-avatar>
+    </div>
 
-      <!-- Form -->
-      <div class="q-pa-md">
-        <!-- Server URL -->
-        <q-input
-          v-if="isFirstTimeSetup"
-          v-model="serverUrl"
-          label="URL do Servidor"
-          class="q-mb-md"
-          disable
-          outlined
-          dense
-        >
-          <template v-slot:prepend>
-            <q-icon name="link" />
-          </template>
-        </q-input>
+    <!-- White form area with rounded top corners -->
+    <div class="form-area column items-center">
+      <div class="text-h4 text-weight-bold text-teal q-mb-md q-my-xl">mUzima</div>
 
-        <!-- Username -->
-        <q-input
-          v-model="username"
-          label="Utilizador"
-          outlined
-          :disable="isLoading"
-          dense
-          class="q-mb-md"
-          autofocus
-        >
-          <template v-slot:prepend>
-            <q-icon name="person" />
-          </template>
-        </q-input>
+      <!-- Inputs -->
+      <q-input
+        v-model="serverUrl"
+        label="Servidor"
+        outlined
+        dense
+        class="q-mb-md full-width"
+      >
+        <template v-slot:prepend>
+          <q-icon name="link" />
+        </template>
+      </q-input>
 
-        <!-- Password -->
-        <q-input
-          v-model="password"
-          :type="isPwd ? 'password' : 'text'"
-          label="Password"
-          :disable="isLoading"
-          outlined
-          class="q-mb-md"
-          dense
-        >
-          <template v-slot:prepend>
-            <q-icon name="key" />
-          </template>
-          <template v-slot:append>
-            <q-icon
-              :name="isPwd ? 'visibility_off' : 'visibility'"
-              class="cursor-pointer"
-              @click="isPwd = !isPwd"
-            />
-          </template>
-        </q-input>
+      <q-input
+        v-model="username"
+        label="Nome do utilizador"
+        outlined
+        dense
+        class="q-mb-md full-width"
+      >
+        <template v-slot:prepend>
+          <q-icon name="person" />
+        </template>
+      </q-input>
 
-        <!-- Login Button -->
-        <q-btn
-          label="ENTRAR"
-          color="primary"
-          class="full-width q-mb-md"
-          @click="handleLogin"
-          :loading="isLoading"
-        />
-      </div>
+      <q-input
+        v-model="password"
+        :type="showPassword ? 'text' : 'password'"
+        label="Senha"
+        outlined
+        dense
+        class="q-mb-md full-width"
+      >
+        <template v-slot:prepend>
+          <q-icon name="lock" />
+        </template>
+        <template v-slot:append>
+          <q-icon
+            :name="showPassword ? 'visibility_off' : 'visibility'"
+            class="cursor-pointer"
+            @click="showPassword = !showPassword"
+          />
+        </template>
+      </q-input>
 
-      <!-- App Version -->
-      <div class="row q-mt-xl">
-        <label class="col text-center">v{{ appVersion }}</label>
-      </div>
+      <!-- Remember Me -->
+      <q-checkbox v-model="rememberMe" label="Remember me" class="q-mb-md self-start" />
+
+      <!-- Login Button -->
+      <q-btn
+        label="ENTRAR"
+        color="teal"
+        class="q-mb-xl"
+        style="width: 200px;"
+        unelevated
+        @click="handleLogin"
+      />
+
+      <!-- Version -->
+      <div class="text-caption text-grey q-mt-xl">{{ appVersion }}</div>
     </div>
   </div>
 </template>
@@ -95,27 +81,27 @@
 <script setup>
 import { ref, onMounted } from 'vue';
 import { useRouter } from 'vue-router';
-import userService from 'src/services/user/userService';
+//import userService from 'src/services/user/userService';
 import { useSwal } from 'src/composables/shared/dialog/dialog';
-import EncryptionManager from 'src/utils/EncryptionManager';
+//import EncryptionManager from 'src/utils/EncryptionManager';
 import { version } from '../../package.json';
 
-// Destructure dialog functions
-const { alertError, alertWarning, alertWarningAction } = useSwal();
+// Dialogs
+const { alertError, alertWarning } = useSwal();
 
-// Router instance
+// Router
 const router = useRouter();
 
-// State variables
-const isPwd = ref(true);
+// State
+const showPassword = ref(false);
 const username = ref('');
 const password = ref('');
-const serverUrl = ref(''); 
+const serverUrl = ref('');
 const isLoading = ref(false);
 const isFirstTimeSetup = ref(false);
 const appVersion = version;
+const rememberMe = ref(false);
 
-// Check if configuration exists in local storage
 onMounted(() => {
   const justLoggedOut = sessionStorage.getItem('justLoggedOut');
 
@@ -125,33 +111,27 @@ onMounted(() => {
     sessionStorage.removeItem('justLoggedOut');
   }
 
-  // Check for initial setup
   const settingsExist = localStorage.getItem('settings');
   if (!settingsExist) {
     isFirstTimeSetup.value = true;
   }
 });
 
-// Show privacy warning
 const showPrivacyWarning = () => {
   alertWarning(
     'Ao acessar este sistema, você está prestes a visualizar informações altamente confidenciais de utentes. É sua responsabilidade protegê-las adequadamente e usá-las somente para os fins autorizados.'
   );
 };
 
-// Handle login
 const handleLogin = async () => {
   isLoading.value = true;
 
   try {
-    // Encrypt and save credentials to session storage
-    EncryptionManager.setEncryptedSessionItem('username', username.value);
-    EncryptionManager.setEncryptedSessionItem('password', password.value);
+    //EncryptionManager.setEncryptedSessionItem('username', username.value);
+    //EncryptionManager.setEncryptedSessionItem('password', password.value);
 
-    // Call login with username and password
-    await userService.login(username.value, password.value);
+    //await userService.login(username.value, password.value);
 
-    // Redirect to main page after successful login
     router.push('/home');
   } catch (error) {
     console.error('Login failed:', error);
@@ -160,33 +140,43 @@ const handleLogin = async () => {
     isLoading.value = false;
   }
 };
-
-// Reconfigure the app
-const handleReconfigure = async () => {
-  const confirmed = await alertWarningAction(
-    'Deseja apagar todas as configurações do aplicativo e reconfigurar?'
-  );
-
-  if (confirmed) {
-    localStorage.clear();
-    userService.logout();
-  }
-};
-
-
 </script>
 
+
 <style scoped>
-.login-page {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  min-height: 100vh;
+.login-wrapper {
+  height: 100vh;
+  width: 100vw;
+  overflow: hidden;
 }
 
-.login-form {
-  width: 100%;
-  max-width: 400px;
+.top-banner {
+  height: 250px;
+  background-color: #009688;
+  position: relative;
+  z-index: 1;
 }
+
+.logo-container {
+  position: absolute;
+  top: 180px; /* adjusts how much it overlaps the form */
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 3;
+}
+
+.form-area {
+  background: white;
+  border-top-left-radius: 40px;
+  border-top-right-radius: 40px;
+  padding: 24px;
+  margin-top: -40px; /* more space to accommodate floating logo */
+  width: 100%;
+  flex: 1;
+  z-index: 2;
+  position: relative;
+}
+
+
+
 </style>

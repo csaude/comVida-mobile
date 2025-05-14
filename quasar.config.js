@@ -23,8 +23,8 @@ module.exports = configure(function (/* ctx */) {
     boot: [
       'i18n',
       'axios',
-      'periodic-task',
-      'database',
+      //'periodic-task',
+      //'database',
     ],
 
     // https://v2.quasar.dev/quasar-cli-vite/quasar-config-js#css
@@ -36,7 +36,7 @@ module.exports = configure(function (/* ctx */) {
     extras: [
       // 'ionicons-v4',
       // 'mdi-v7',
-      // 'fontawesome-v6',
+      'fontawesome-v6',
       // 'eva-icons',
       // 'themify',
       // 'line-awesome',
